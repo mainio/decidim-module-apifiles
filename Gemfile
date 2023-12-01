@@ -13,7 +13,6 @@ require_relative "#{base_path}lib/decidim/apifiles/version"
 DECIDIM_VERSION = Decidim::Apifiles.decidim_version
 
 gem "decidim", DECIDIM_VERSION
-gem "decidim-apiauth", github: "mainio/decidim-module-apiauth", branch: "main"
 gem "decidim-apifiles", path: "."
 
 gem "bootsnap", "~> 1.4"
@@ -27,6 +26,9 @@ group :development, :test do
 
   gem "decidim-dev", DECIDIM_VERSION
   gem "decidim-initiatives", DECIDIM_VERSION
+
+  # Required for testing
+  gem "decidim-apiauth", github: "mainio/decidim-module-apiauth", branch: "main"
 
   gem "brakeman", "~> 5.2"
   gem "parallel_tests", "~> 3.7"
