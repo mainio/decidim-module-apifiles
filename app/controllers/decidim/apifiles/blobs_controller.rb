@@ -33,7 +33,7 @@ module Decidim
           content_type: uploaded_file.content_type
         )
 
-        render json: blob.as_json(methods: :signed_id)
+        render json: blob.as_json(methods: :signed_id).transform_keys { |key| key.camelize(:lower) }
       end
 
       private
