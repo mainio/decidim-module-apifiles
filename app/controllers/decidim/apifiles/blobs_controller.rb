@@ -13,7 +13,7 @@ module Decidim
     # uploading the files as that would be difficult to do through the normal
     # GraphQL API (e.g. by base64 encoding the whole file which may cause issues
     # when the file sizes become larger).
-    class BlobsController < Api::ApplicationController
+    class BlobsController < Decidim::Api::ApplicationController
       register_permissions(
         ::Decidim::Apifiles::BlobsController,
         ::Decidim::Apifiles::Permissions,

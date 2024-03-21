@@ -8,5 +8,8 @@ module Decidim
   module Apifiles
     autoload :QueryExtensions, "decidim/apifiles/query_extensions"
     autoload :MutationExtensions, "decidim/apifiles/mutation_extensions"
+
+    # Errors
+    class ActionForbidden < StandardError; end
   end
 end

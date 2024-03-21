@@ -29,14 +29,14 @@ describe "API file upload", type: :request do
         end.to change(ActiveStorage::Blob, :count).by(1)
 
         response_json = JSON.parse(response.body)
-        expect(response_json["content_type"]).to eq("image/jpeg")
+        expect(response_json["contentType"]).to eq("image/jpeg")
         expect(response_json["filename"]).to eq("city.jpeg")
-        expect(response_json["byte_size"]).to eq(File.size(file))
+        expect(response_json["byteSize"]).to eq(File.size(file))
 
         blob = ActiveStorage::Blob.order(:id).last
         expect(response_json["id"]).to eq(blob.id)
         expect(response_json["checksum"]).to eq(blob.checksum)
-        expect(response_json["signed_id"]).to eq(blob.signed_id)
+        expect(response_json["signedId"]).to eq(blob.signed_id)
       end
     end
 

@@ -8,7 +8,6 @@ module Decidim
     class Engine < ::Rails::Engine
       isolate_namespace Decidim::Apifiles
 
-      paths["db/migrate"] = nil
       paths["lib/tasks"] = nil
 
       routes do
@@ -34,12 +33,31 @@ module Decidim
         end
       end
 
+      initializer "decidim_apifiles.api_extensions" do
+        Decidim::Core::AttachmentType.include Decidim::Apifiles::Api::AttachmentTypeExtensions
+      end
+
       initializer "decidim_apifiles.query_extensions" do
         Decidim::Api::QueryType.include Decidim::Apifiles::QueryExtensions
       end
 
       initializer "decidim_apifiles.mutation_extensions", after: "decidim-api.graphiql" do
         Decidim::Api::MutationType.include Decidim::Apifiles::MutationExtensions
+      end
+
+      initializer "decidim_apifiles.overrides", after: "decidim.action_controller" do |app|
+        app.config.to_prepare do
+          # Form extensions
+          Decidim::Admin::AttachmentForm.include(Decidim::Apifiles::AttachmentFormExtensions)
+          Decidim::Admin::AttachmentCollectionForm.include(Decidim::Apifiles::AttachmentCollectionFormExtensions)
+
+          # Command extensions
+          Decidim::Admin::CreateAttachmentCollection.include(Decidim::Apifiles::CreateAttachmentCollectionExtensions)
+          Decidim::Admin::UpdateAttachmentCollection.include(Decidim::Apifiles::UpdateAttachmentCollectionExtensions)
+
+          # Model extensions
+          Decidim::AttachmentCollection.include(Decidim::Apifiles::AttachmentCollectionExtensions)
+        end
       end
     end
   end
