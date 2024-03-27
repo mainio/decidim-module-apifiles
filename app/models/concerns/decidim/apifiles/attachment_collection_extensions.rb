@@ -6,7 +6,7 @@ module Decidim
       extend ActiveSupport::Concern
 
       included do
-        validates :slug, uniqueness: { scope: :collection_for }, if: -> { slug.present? }
+        validates :key, uniqueness: { scope: :collection_for }, if: -> { key.present? }
       end
     end
   end

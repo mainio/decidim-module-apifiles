@@ -8,7 +8,8 @@ module Decidim
       description "Attributes for attachment collections"
 
       argument :weight, GraphQL::Types::Int, description: "The attachment collection weight, i.e. its position, lowest first", required: false, default_value: 0
-      argument :slug, GraphQL::Types::String, description: "The attachment collection slug, i.e. its technical handle", required: false
+      argument :key, GraphQL::Types::String, description: "The attachment collection key, i.e. its technical handle", required: false
+      argument :slug, GraphQL::Types::String, description: "DEPRECATED: Use 'key' instead", required: false
       argument :name, GraphQL::Types::JSON, description: "The attachment collection name localized hash, e.g. {\"en\": \"English name\"}", required: true
       argument(
         :description,

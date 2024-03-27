@@ -13,7 +13,7 @@ module Decidim
           callback.raw_filter.attributes.delete(:description)
         end
 
-        attribute :slug, String
+        attribute :key, String
       end
     end
   end

@@ -14,8 +14,8 @@ module Decidim
             weight: form.weight,
             description: form.description.presence
           }.compact.merge(
-            # Ensure that slug can be set to nil
-            slug: form.slug.presence
+            # Ensure that key can be set to nil
+            key: form.key.presence
           )
         end
       end

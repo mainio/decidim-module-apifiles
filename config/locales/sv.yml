@@ -1,0 +1,5 @@
+sv:
+  activemodel:
+    attributes:
+      attachment_collection:
+        key: Nyckel

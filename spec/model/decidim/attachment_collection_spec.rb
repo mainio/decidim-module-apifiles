@@ -10,25 +10,25 @@ describe Decidim::AttachmentCollection do
 
   it { is_expected.to be_valid }
 
-  context "with slug" do
-    let(:attachment_collection) { build(:attachment_collection, collection_for: model, slug: "testing") }
+  context "with key" do
+    let(:attachment_collection) { build(:attachment_collection, collection_for: model, key: "testing") }
 
     it { is_expected.to be_valid }
 
-    context "when another record uses the same slug" do
-      let(:other_collection) { build(:attachment_collection, slug: "testing") }
+    context "when another record uses the same key" do
+      let(:other_collection) { build(:attachment_collection, key: "testing") }
 
       it { is_expected.to be_valid }
     end
 
     context "when duplicate" do
-      let!(:other_collection) { create(:attachment_collection, slug: "testing", collection_for: model) }
+      let!(:other_collection) { create(:attachment_collection, key: "testing", collection_for: model) }
 
       it { is_expected.not_to be_valid }
 
       it "adds an error" do
         subject.valid?
-        expect(subject.errors[:slug]).to eq ["has already been taken"]
+        expect(subject.errors[:key]).to eq ["has already been taken"]
       end
     end
   end

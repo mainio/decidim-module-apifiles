@@ -25,14 +25,14 @@ describe Decidim::Apifiles::AttachableCollectionsMutationsInterface do
     let(:name) { generate_localized_title }
     let(:description) { generate_localized_title }
     let(:weight) { 123 }
-    let(:slug) { "testing" }
+    let(:key) { "testing" }
     let(:query) do
       %(
         {
           createAttachmentCollection(
             attributes: {
               weight: #{weight},
-              slug: "#{slug}",
+              key: "#{key}",
               name: #{convert_value(name)},
               description: #{convert_value(description)}
             }
@@ -54,9 +54,36 @@ describe Decidim::Apifiles::AttachableCollectionsMutationsInterface do
     it "sets all the attributes for the created attachment collection" do
       ac = Decidim::AttachmentCollection.find(response["createAttachmentCollection"]["id"])
       expect(ac.name).to eq(name)
+      expect(ac.key).to eq(key)
       expect(ac.description).to eq(description)
       expect(ac.weight).to eq(weight)
       expect(ac.collection_for).to eq(model)
+    end
+
+    context "when the key is provided as 'slug'" do
+      let(:query) do
+        %(
+          {
+            createAttachmentCollection(
+              attributes: {
+                weight: #{weight},
+                slug: "#{key}",
+                name: #{convert_value(name)},
+                description: #{convert_value(description)}
+              }
+            ) { id }
+          }
+        )
+      end
+
+      it "sets all the attributes for the created attachment collection" do
+        ac = Decidim::AttachmentCollection.find(response["createAttachmentCollection"]["id"])
+        expect(ac.name).to eq(name)
+        expect(ac.key).to eq(key)
+        expect(ac.description).to eq(description)
+        expect(ac.weight).to eq(weight)
+        expect(ac.collection_for).to eq(model)
+      end
     end
 
     context "when weight is not provided" do
@@ -65,7 +92,7 @@ describe Decidim::Apifiles::AttachableCollectionsMutationsInterface do
           {
             createAttachmentCollection(
               attributes: {
-                slug: "#{slug}",
+                key: "#{key}",
                 name: #{convert_value(name)},
                 description: #{convert_value(description)}
               }
@@ -86,7 +113,7 @@ describe Decidim::Apifiles::AttachableCollectionsMutationsInterface do
           {
             createAttachmentCollection(
               attributes: {
-                slug: "#{slug}",
+                key: "#{key}",
                 name: #{convert_value(name)}
               }
             ) { id }
@@ -100,7 +127,7 @@ describe Decidim::Apifiles::AttachableCollectionsMutationsInterface do
       end
     end
 
-    context "when slug is not provided" do
+    context "when key is not provided" do
       let(:query) do
         %(
           {
@@ -115,18 +142,18 @@ describe Decidim::Apifiles::AttachableCollectionsMutationsInterface do
 
       it "sets it to nil" do
         ac = Decidim::AttachmentCollection.find(response["createAttachmentCollection"]["id"])
-        expect(ac.slug).to be_nil
+        expect(ac.key).to be_nil
       end
     end
   end
 
   describe "updateAttachmentCollection" do
-    let(:collection) { create(:attachment_collection, collection_for: model, weight: 999, slug: "orig") }
+    let(:collection) { create(:attachment_collection, collection_for: model, weight: 999, key: "orig") }
 
     let(:name) { generate_localized_title }
     let(:description) { generate_localized_title }
     let(:weight) { 123 }
-    let(:slug) { "testing" }
+    let(:key) { "testing" }
     let(:query) do
       %(
         {
@@ -134,7 +161,7 @@ describe Decidim::Apifiles::AttachableCollectionsMutationsInterface do
             id: "#{collection.id}",
             attributes: {
               weight: #{weight},
-              slug: "#{slug}",
+              key: "#{key}",
               name: #{convert_value(name)},
               description: #{convert_value(description)}
             }
@@ -154,8 +181,37 @@ describe Decidim::Apifiles::AttachableCollectionsMutationsInterface do
       collection.reload
       expect(collection.name.except("machine_translations")).to eq(name)
       expect(collection.description.except("machine_translations")).to eq(description)
+      expect(collection.key).to eq(key)
       expect(collection.weight).to eq(weight)
       expect(collection.collection_for).to eq(model)
+    end
+
+    context "when the key is provided as 'slug'" do
+      let(:query) do
+        %(
+          {
+            updateAttachmentCollection(
+              id: "#{collection.id}",
+              attributes: {
+                weight: #{weight},
+                slug: "#{key}",
+                name: #{convert_value(name)},
+                description: #{convert_value(description)}
+              }
+            ) { id }
+          }
+        )
+      end
+
+      it "sets all the attributes for the created attachment collection" do
+        response
+        collection.reload
+        expect(collection.name.except("machine_translations")).to eq(name)
+        expect(collection.description.except("machine_translations")).to eq(description)
+        expect(collection.key).to eq(key)
+        expect(collection.weight).to eq(weight)
+        expect(collection.collection_for).to eq(model)
+      end
     end
 
     context "when weight is not provided" do
@@ -165,7 +221,7 @@ describe Decidim::Apifiles::AttachableCollectionsMutationsInterface do
             updateAttachmentCollection(
               id: "#{collection.id}",
               attributes: {
-                slug: "#{slug}",
+                key: "#{key}",
                 name: #{convert_value(name)},
                 description: #{convert_value(description)}
               }
@@ -188,7 +244,7 @@ describe Decidim::Apifiles::AttachableCollectionsMutationsInterface do
             updateAttachmentCollection(
               id: "#{collection.id}",
               attributes: {
-                slug: "#{slug}",
+                key: "#{key}",
                 name: #{convert_value(name)}
               }
             ) { id }
@@ -204,7 +260,7 @@ describe Decidim::Apifiles::AttachableCollectionsMutationsInterface do
       end
     end
 
-    context "when slug is not provided" do
+    context "when key is not provided" do
       let(:query) do
         %(
           {
@@ -218,13 +274,30 @@ describe Decidim::Apifiles::AttachableCollectionsMutationsInterface do
         )
       end
 
-      it "keeps the original slug" do
-        original_slug = collection.slug
+      it "keeps the original key" do
+        original_key = collection.key
         response
         collection.reload
-        expect(collection.slug).not_to be_empty
-        expect(collection.slug).to eq(original_slug)
+        expect(collection.key).not_to be_empty
+        expect(collection.key).to eq(original_key)
       end
+    end
+  end
+
+  describe "deleteAttachmentCollection" do
+    let!(:collection) { create(:attachment_collection, collection_for: model) }
+    let(:query) do
+      %({ deleteAttachmentCollection(id: "#{collection.id}") { id } })
+    end
+
+    it_behaves_like "when the user does not have permissions"
+
+    it "creates an action log record" do
+      expect { response }.to change(Decidim::ActionLog, :count).by(1)
+    end
+
+    it "deletes the collection" do
+      expect { response }.to change(Decidim::AttachmentCollection, :count).by(-1)
     end
   end
 end

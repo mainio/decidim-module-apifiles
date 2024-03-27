@@ -20,7 +20,7 @@ module Decidim
         def attributes
           {
             name: form.name,
-            slug: form.slug.presence&.strip,
+            key: form.key.presence&.strip,
             weight: form.weight,
             description: form.description,
             collection_for: @collection_for

@@ -62,8 +62,8 @@ module Decidim
 
         params = attachment_collection_params(attributes)
 
-        # Keep the original slug through the API if the slug wasn't provided
-        params[:slug] = attachment_collection.slug if attributes.slug.blank?
+        # Keep the original key through the API if the key wasn't provided
+        params[:key] = attachment_collection.key if attributes.key.blank? && attributes.slug.blank?
 
         form = Decidim::Admin::AttachmentCollectionForm.from_params(params).with_context(
           current_organization: current_organization,
@@ -116,7 +116,7 @@ module Decidim
 
       def attachment_collection_params(attributes)
         {
-          slug: attributes.slug,
+          key: attributes.key.presence || attributes.slug,
           weight: attributes.weight,
           name: attributes.name,
           description: attributes.description

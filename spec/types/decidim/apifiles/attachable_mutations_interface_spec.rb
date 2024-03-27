@@ -131,7 +131,7 @@ describe Decidim::Apifiles::AttachableMutationsInterface do
       end
 
       context "and the collection belongs to another object" do
-        let(:collection) { create(:attachment_collection, collection_for: other, slug: "testing") }
+        let(:collection) { create(:attachment_collection, collection_for: other, key: "testing") }
         let(:other) { create(:result) }
 
         it "does not create the attachment" do
@@ -168,14 +168,14 @@ describe Decidim::Apifiles::AttachableMutationsInterface do
               attributes: {
                 title: #{convert_value(title)},
                 file: { blobId: #{blob.id} },
-                collection: { slug: "#{collection.slug}" }
+                collection: { slug: "#{collection.key}" }
               }
             ) { id }
           }
         )
       end
 
-      let!(:collection) { create(:attachment_collection, collection_for: model, slug: "testing") }
+      let!(:collection) { create(:attachment_collection, collection_for: model, key: "testing") }
 
       it "sets the collection" do
         attachment = Decidim::Attachment.find(response["createAttachment"]["id"])
@@ -203,7 +203,7 @@ describe Decidim::Apifiles::AttachableMutationsInterface do
       end
 
       context "and the collection belongs to another object" do
-        let!(:collection) { create(:attachment_collection, collection_for: other, slug: "testing") }
+        let!(:collection) { create(:attachment_collection, collection_for: other, key: "testing") }
         let(:other) { create(:result) }
 
         it "does not create the attachment" do
@@ -375,7 +375,7 @@ describe Decidim::Apifiles::AttachableMutationsInterface do
       end
 
       context "and the collection belongs to another object" do
-        let(:collection) { create(:attachment_collection, collection_for: other, slug: "testing") }
+        let(:collection) { create(:attachment_collection, collection_for: other, key: "testing") }
         let(:other) { create(:result) }
 
         it "does not update the attachment" do
@@ -405,6 +405,103 @@ describe Decidim::Apifiles::AttachableMutationsInterface do
       end
     end
 
+    context "when collection is provided using key" do
+      let(:query) do
+        %(
+          {
+            updateAttachment(
+              id: "#{attachment.id}",
+              attributes: {
+                title: #{convert_value(title)},
+                file: { blobId: #{blob.id} },
+                collection: { key: "#{collection.key}" }
+              }
+            ) { id }
+          }
+        )
+      end
+
+      let!(:collection) { create(:attachment_collection, collection_for: model, key: "testing") }
+
+      it "sets the collection" do
+        response
+        attachment.reload
+        expect(attachment.attachment_collection).to eq(collection)
+      end
+
+      context "and the key is not found" do
+        let(:query) do
+          %(
+            {
+              updateAttachment(
+                id: "#{attachment.id}",
+                attributes: {
+                  title: #{convert_value(title)},
+                  file: { blobId: #{blob.id} },
+                  collection: { key: "foobar" }
+                }
+              ) { id }
+            }
+          )
+        end
+
+        it "does not update the attachment" do
+          expect { response }.to raise_error(StandardError)
+        end
+      end
+
+      context "and the collection belongs to another object" do
+        let!(:collection) { create(:attachment_collection, collection_for: other, key: "testing") }
+        let(:other) { create(:result) }
+
+        it "does not update the attachment" do
+          expect { response }.to raise_error(StandardError)
+        end
+      end
+
+      context "and the key is empty" do
+        let(:query) do
+          %(
+            {
+              updateAttachment(
+                id: "#{attachment.id}",
+                attributes: {
+                  title: #{convert_value(title)},
+                  file: { blobId: #{blob.id} },
+                  collection: { key: "" }
+                }
+              ) { id }
+            }
+          )
+        end
+
+        it "does not update the attachment" do
+          expect { response }.to raise_error(StandardError)
+        end
+      end
+
+      context "and the key is not set" do
+        let(:query) do
+          %(
+            {
+              updateAttachment(
+                id: "#{attachment.id}",
+                attributes: {
+                  title: #{convert_value(title)},
+                  file: { blobId: #{blob.id} },
+                  collection: { key: null }
+                }
+              ) { id }
+            }
+          )
+        end
+
+        it "does not update the attachment" do
+          expect { response }.to raise_error(StandardError)
+        end
+      end
+    end
+
     context "when collection is provided using slug" do
       let(:query) do
         %(
@@ -414,14 +511,14 @@ describe Decidim::Apifiles::AttachableMutationsInterface do
               attributes: {
                 title: #{convert_value(title)},
                 file: { blobId: #{blob.id} },
-                collection: { slug: "#{collection.slug}" }
+                collection: { slug: "#{collection.key}" }
               }
             ) { id }
           }
         )
       end
 
-      let!(:collection) { create(:attachment_collection, collection_for: model, slug: "testing") }
+      let!(:collection) { create(:attachment_collection, collection_for: model, key: "testing") }
 
       it "sets the collection" do
         response
@@ -451,7 +548,7 @@ describe Decidim::Apifiles::AttachableMutationsInterface do
       end
 
       context "and the collection belongs to another object" do
-        let!(:collection) { create(:attachment_collection, collection_for: other, slug: "testing") }
+        let!(:collection) { create(:attachment_collection, collection_for: other, key: "testing") }
         let(:other) { create(:result) }
 
         it "does not update the attachment" do

@@ -16,18 +16,22 @@ describe Decidim::Core::AttachmentType do
     end
   end
 
-  # This works through the actual API but for some reason doesn't work at the
-  # specs.
-  # describe "fileBlob" do
-  #   let(:query) { "{ fileBlob { id } }" }
+  describe "fileBlob" do
+    let(:query) { "{ fileBlob { id } }" }
 
-  #   before { model.reload }
+    it "does not return the blob for unauthorized users" do
+      expect(response["fileBlob"]).to be_nil
+    end
 
-  #   it "returns the blob's id" do
-  #     blob = response["fileBlob"]
-  #     expect(blob).to include("id" => model.file.blob.id.to_s)
-  #   end
-  # end
+    context "when signed in as an admin" do
+      let!(:current_user) { create(:user, :confirmed, :admin, organization: current_organization) }
+
+      it "returns the blob's id" do
+        blob = response["fileBlob"]
+        expect(blob).to include("id" => model.file.blob.id.to_s)
+      end
+    end
+  end
 
   describe "collection" do
     let(:query) { "{ collection { id } }" }
