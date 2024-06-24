@@ -15,11 +15,11 @@ DECIDIM_VERSION = Decidim::Apifiles.decidim_version
 gem "decidim", DECIDIM_VERSION
 gem "decidim-apifiles", path: "."
 
-gem "bootsnap", "~> 1.4"
+gem "bootsnap", "~> 1.17"
 
-gem "puma", ">= 5.6.2"
+gem "puma", ">= 6.4.2"
 
-gem "faker", "~> 2.14"
+gem "faker", "~> 3.2.2"
 
 group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
@@ -37,9 +37,9 @@ end
 
 group :development do
   gem "letter_opener_web", "~> 2.0"
-  gem "listen", "~> 3.1"
-  gem "spring", "~> 2.0"
-  gem "spring-watcher-listen", "~> 2.0"
+  gem "listen", "~> 3.8"
+  gem "spring", "~> 4.1.3"
+  gem "spring-watcher-listen", "~> 2.1"
   gem "web-console", "~> 4.2"
 
   # For testing the upload through the Ruby example (see the /examples folder)
