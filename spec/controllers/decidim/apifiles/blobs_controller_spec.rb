@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe Decidim::Apifiles::BlobsController, type: :controller do
+describe Decidim::Apifiles::BlobsController do
   routes { Decidim::Apifiles::Engine.routes }
 
   let(:organization) { create(:organization) }
@@ -12,7 +12,7 @@ describe Decidim::Apifiles::BlobsController, type: :controller do
       "image/jpeg"
     )
   end
-  let(:params) { { file: file } }
+  let(:params) { { file: } }
 
   before do
     request.env["decidim.current_organization"] = organization
@@ -20,7 +20,7 @@ describe Decidim::Apifiles::BlobsController, type: :controller do
 
   context "when the user is not authenticated" do
     before do
-      post :create, params: params
+      post :create, params:
     end
 
     it "responds with HTTP code 401" do
@@ -32,11 +32,11 @@ describe Decidim::Apifiles::BlobsController, type: :controller do
     before do
       sign_in current_user
 
-      post :create, params: params
+      post :create, params:
     end
 
     context "and the user is a regular user" do
-      let(:current_user) { create(:user, :confirmed, organization: organization) }
+      let(:current_user) { create(:user, :confirmed, organization:) }
 
       it "responds with HTTP code 403" do
         expect(response).to have_http_status(:forbidden)
@@ -44,7 +44,7 @@ describe Decidim::Apifiles::BlobsController, type: :controller do
     end
 
     context "and the user is an admin" do
-      let(:current_user) { create(:user, :confirmed, :admin, organization: organization) }
+      let(:current_user) { create(:user, :confirmed, :admin, organization:) }
 
       it "allows uploading a file" do
         expect(response).to have_http_status(:ok)
@@ -55,7 +55,7 @@ describe Decidim::Apifiles::BlobsController, type: :controller do
 
         it "responds with HTTP code 422" do
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(JSON.parse(response.body)).to eq({ "error" => "file_not_provided" })
+          expect(response.parsed_body).to eq({ "error" => "file_not_provided" })
         end
       end
 
@@ -69,7 +69,7 @@ describe Decidim::Apifiles::BlobsController, type: :controller do
 
         it "does not allow uploading a file" do
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(JSON.parse(response.body)).to eq({ "error" => "unallowed_file_extension" })
+          expect(response.parsed_body).to eq({ "error" => "unallowed_file_extension" })
         end
       end
 
@@ -83,7 +83,7 @@ describe Decidim::Apifiles::BlobsController, type: :controller do
 
         it "does not allow uploading a file" do
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(JSON.parse(response.body)).to eq({ "error" => "unallowed_content_type" })
+          expect(response.parsed_body).to eq({ "error" => "unallowed_content_type" })
         end
       end
     end

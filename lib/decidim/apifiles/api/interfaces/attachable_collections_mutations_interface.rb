@@ -29,9 +29,9 @@ module Decidim
         raise ::Decidim::ActionForbidden unless current_user&.admin?
 
         form = Decidim::Admin::AttachmentCollectionForm.from_params(attachment_collection_params(attributes)).with_context(
-          current_organization: current_organization,
+          current_organization:,
           current_component: object.component,
-          current_user: current_user,
+          current_user:,
           collection_for: object
         )
 
@@ -57,7 +57,7 @@ module Decidim
       def update_attachment_collection(id:, attributes:)
         raise ::Decidim::ActionForbidden unless current_user&.admin?
 
-        attachment_collection = object.attachment_collections.find_by(id: id)
+        attachment_collection = object.attachment_collections.find_by(id:)
         raise GraphQL::ExecutionError, "Invalid attachment collection ID provided: #{id}" unless attachment_collection
 
         params = attachment_collection_params(attributes)
@@ -66,9 +66,9 @@ module Decidim
         params[:key] = attachment_collection.key if attributes.key.blank? && attributes.slug.blank?
 
         form = Decidim::Admin::AttachmentCollectionForm.from_params(params).with_context(
-          current_organization: current_organization,
+          current_organization:,
           current_component: object.component,
-          current_user: current_user,
+          current_user:,
           collection_for: object
         )
 
@@ -94,7 +94,7 @@ module Decidim
       def delete_attachment_collection(id:)
         raise ::Decidim::ActionForbidden unless current_user&.admin?
 
-        attachment_collection = object.attachment_collections.find_by(id: id)
+        attachment_collection = object.attachment_collections.find_by(id:)
         raise GraphQL::ExecutionError, "Invalid attachment collection ID provided: #{id}" unless attachment_collection
 
         Decidim.traceability.perform_action!("delete", attachment_collection, current_user) do

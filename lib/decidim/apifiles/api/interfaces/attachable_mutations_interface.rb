@@ -33,9 +33,9 @@ module Decidim
         form = Decidim::Admin::AttachmentForm.from_params(
           "attachment" => attachment_params(attributes)
         ).with_context(
-          current_organization: current_organization,
+          current_organization:,
           current_component: object.component,
-          current_user: current_user,
+          current_user:,
           attached_to: object
         )
 
@@ -61,15 +61,15 @@ module Decidim
       def update_attachment(id:, attributes:)
         raise ::Decidim::ActionForbidden unless current_user&.admin?
 
-        attachment = object.attachments.find_by(id: id)
+        attachment = object.attachments.find_by(id:)
         raise GraphQL::ExecutionError, "Invalid attachment ID provided: #{id}" unless attachment
 
         form = Decidim::Admin::AttachmentForm.from_params(
           "attachment" => attachment_params(attributes)
         ).with_context(
-          current_organization: current_organization,
+          current_organization:,
           current_component: object.component,
-          current_user: current_user,
+          current_user:,
           attached_to: object
         )
 
@@ -95,7 +95,7 @@ module Decidim
       def delete_attachment(id:)
         raise ::Decidim::ActionForbidden unless current_user&.admin?
 
-        attachment = object.attachments.find_by(id: id)
+        attachment = object.attachments.find_by(id:)
         raise GraphQL::ExecutionError, "Invalid attachment ID provided: #{id}" unless attachment
 
         Decidim.traceability.perform_action!("delete", attachment, current_user) do

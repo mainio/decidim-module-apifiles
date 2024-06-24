@@ -2,21 +2,21 @@
 
 require "spec_helper"
 
-describe "API file upload", type: :request do
+describe "APIFileUpload" do
   let!(:organization) { create(:organization) }
-  let!(:user) { create(:user, :confirmed, :admin, organization: organization) }
+  let!(:user) { create(:user, :confirmed, :admin, organization:) }
 
   let(:file) { Decidim::Dev.asset("city.jpeg") }
   let(:uploaded_file) { Rack::Test::UploadedFile.new(file, "image/jpeg") }
 
   context "when authenticated" do
     context "and the user is a regular user" do
-      let!(:user) { create(:user, :confirmed, organization: organization) }
+      let!(:user) { create(:user, :confirmed, organization:) }
 
       it "does not allow uploading a file" do
         expect do
           upload_file(authenticate)
-          expect(response.code).to eq("403")
+          expect(response).to have_http_status(:forbidden)
         end.not_to change(ActiveStorage::Blob, :count)
       end
     end
@@ -25,10 +25,10 @@ describe "API file upload", type: :request do
       it "allows uploading files" do
         expect do
           upload_file(authenticate)
-          expect(response.code).to eq("200")
+          expect(response).to have_http_status(:ok)
         end.to change(ActiveStorage::Blob, :count).by(1)
 
-        response_json = JSON.parse(response.body)
+        response_json = response.parsed_body
         expect(response_json["contentType"]).to eq("image/jpeg")
         expect(response_json["filename"]).to eq("city.jpeg")
         expect(response_json["byteSize"]).to eq(File.size(file))
@@ -46,7 +46,7 @@ describe "API file upload", type: :request do
         params: { user: { email: user.email, password: "decidim123456789" } },
         headers: { "HOST" => organization.host }
       )
-      expect(response.code).to eq("200")
+      expect(response).to have_http_status(:ok)
       response.headers["Authorization"]
     end
   end
@@ -55,7 +55,7 @@ describe "API file upload", type: :request do
     it "does not allow uploading a file" do
       expect do
         upload_file("Bearer abcdef123456789")
-        expect(response.code).to eq("401")
+        expect(response).to have_http_status(:unauthorized)
       end.not_to change(ActiveStorage::Blob, :count)
     end
   end
