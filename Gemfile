@@ -31,8 +31,14 @@ group :development, :test do
   gem "decidim-apiauth", github: "mainio/decidim-module-apiauth", branch: "main"
 
   gem "brakeman", "~> 5.2"
-  gem "parallel_tests", "~> 3.7"
+  gem "parallel_tests", "~> 4.2"
+
+  # rubocop & rubocop-rspec are set to the following versions because of a change where FactoryBot/CreateList
+  # must be a boolean instead of contextual. These version locks can be removed when this problem is handled
+  # through decidim-dev.
+  gem "rubocop", "~>1.28"
   gem "rubocop-faker"
+  gem "rubocop-rspec", "2.20"
 end
 
 group :development do

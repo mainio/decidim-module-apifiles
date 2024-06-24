@@ -17,7 +17,7 @@ module Decidim
       end
 
       def blob(id:)
-        ActiveStorage::Blob.find_by(id: id)
+        ActiveStorage::Blob.find_by(id:)
       end
     end
   end
