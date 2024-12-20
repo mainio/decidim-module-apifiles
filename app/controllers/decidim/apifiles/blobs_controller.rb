@@ -77,6 +77,10 @@ module Decidim
       def permission_scope
         :admin
       end
+
+      def current_user
+        super || try(:current_api_user)
+      end
     end
   end
 end
