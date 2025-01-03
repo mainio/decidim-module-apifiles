@@ -114,13 +114,13 @@ describe Decidim::Apifiles::BlobType do
       end
     end
 
-    describe "url" do
-      let(:query) { "{ url }" }
+    describe "src" do
+      let(:query) { "{ src }" }
 
       let(:host) { "http://#{current_organization.host}:#{Capybara.server_port}" }
 
-      it "returns the url" do
-        expect(response).to include("url" => "#{host}/rails/active_storage/blobs/redirect/#{model.signed_id}/#{model.filename}")
+      it "returns the src" do
+        expect(response).to include("src" => "#{host}/rails/active_storage/blobs/redirect/#{model.signed_id}/#{model.filename}")
       end
     end
   end
