@@ -19,10 +19,9 @@ module Decidim
       field :checksum, GraphQL::Types::String, "The checksum of this blob", null: false
       field :created_at, Decidim::Core::DateTimeType, "When this blob was created", null: true
       field :service_name, GraphQL::Types::String, "The service name of this blob (where the blob is stored at)", null: false
+      field :src, GraphQL::Types::String, "The url of this blob", null: false
 
-      field :url, GraphQL::Types::String, "The url of this blob", null: false
-
-      def url
+      def src
         asset_routes.rails_blob_url(object, **default_url_options)
       end
 

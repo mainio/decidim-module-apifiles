@@ -14,6 +14,8 @@ module Decidim
     # GraphQL API (e.g. by base64 encoding the whole file which may cause issues
     # when the file sizes become larger).
     class BlobsController < Decidim::Api::ApplicationController
+      include Rails.application.routes.url_helpers
+
       register_permissions(
         ::Decidim::Apifiles::BlobsController,
         ::Decidim::Apifiles::Permissions,
@@ -33,7 +35,9 @@ module Decidim
           content_type: uploaded_file.content_type
         )
 
-        render json: blob.as_json(methods: :signed_id).transform_keys { |key| key.camelize(:lower) }
+        render json: blob.as_json(methods: :signed_id)
+                         .merge("src" => Rails.application.routes.url_helpers.rails_blob_path(blob, only_path: true))
+                         .transform_keys { |key| key.camelize(:lower) }
       end
 
       private
