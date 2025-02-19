@@ -31,7 +31,7 @@ module Decidim
 
         blob = ActiveStorage::Blob.create_and_upload!(
           io: uploaded_file,
-          filename: uploaded_file.original_filename,
+          filename: sanitized_filename,
           content_type: uploaded_file.content_type
         )
 
@@ -44,6 +44,22 @@ module Decidim
 
       def uploaded_file
         @uploaded_file ||= params.require(:file)
+      end
+
+      # In case the file name contains invalid byte sequences, they could not be
+      # stored in the database due to the following exception:
+      #   ActiveRecord::StatementInvalid:
+      #     PG::CharacterNotInRepertoire: ERROR:  invalid byte sequence for encoding "UTF8": 0xea 0x78 0xe4
+      #     CONTEXT:  unnamed portal parameter $2
+      #
+      # This replaces all invalid byte sequences before persisting the file to
+      # the database.
+      def sanitized_filename
+        @sanitized_filename || begin
+          name = uploaded_file.original_filename
+          name = name.scrub unless name.valid_encoding?
+          name
+        end
       end
 
       def uploaded_file_extension

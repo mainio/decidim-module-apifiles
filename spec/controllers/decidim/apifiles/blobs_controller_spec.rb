@@ -86,6 +86,24 @@ describe Decidim::Apifiles::BlobsController do
           expect(response.parsed_body).to eq({ "error" => "unallowed_content_type" })
         end
       end
+
+      context "with file name in Windows-1252 encoding" do
+        let(:file) do
+          Decidim::Dev.test_file("Exampledocument.pdf", "application/pdf").tap do |f|
+            # In case we stored a file with such name in the "fixtures" folder,
+            # this would not work because `rack-test` fails to generate the
+            # `Rack::Test::UploadedFile` due to the weird name. We need to force
+            # the name on the instance in order to replicate the bug with
+            # storing file names with this encoding. There is no other way to
+            # change the "original_filename" of the instance.
+            f.instance_variable_set(:@original_filename, "êxämplö®'.pdf".encode("WINDOWS-1252"))
+          end
+        end
+
+        it "allows uploading a file" do
+          expect(response).to have_http_status(:ok)
+        end
+      end
     end
   end
 end
