@@ -62,7 +62,7 @@ describe Decidim::Apifiles::BlobsController do
       context "with unallowed file extension" do
         let(:file) do
           Rack::Test::UploadedFile.new(
-            Decidim::Dev.test_file("assemblies.json", "application/json"),
+            Decidim::Dev.test_file("icon.ico", "image/vnd.microsoft.icon"),
             "application/json"
           )
         end
