@@ -21,6 +21,9 @@ gem "puma", ">= 6.4.2"
 
 gem "faker", "~> 3.2.2"
 
+# See: https://github.com/decidim/decidim/issues/13886
+gem "concurrent-ruby", "1.3.4"
+
 group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
 
@@ -39,6 +42,10 @@ group :development, :test do
   gem "rubocop", "~>1.28"
   gem "rubocop-faker"
   gem "rubocop-rspec", "2.20"
+
+  # Fix issue with simplecov-cobertura
+  # See: https://github.com/jessebs/simplecov-cobertura/pull/44
+  gem "rexml", "3.4.1"
 end
 
 group :development do
