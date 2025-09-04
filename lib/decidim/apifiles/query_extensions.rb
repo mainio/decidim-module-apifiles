@@ -20,7 +20,7 @@ module Decidim
       # Retrieves a blob by ID or signed ID
       def blob(id: nil, signed_id: nil)
         if id
-          ActiveStorage::Blob.find_by(id: id)
+          ActiveStorage::Blob.find_by(id:)
         elsif signed_id
           ActiveStorage::Blob.find_signed(signed_id)
         else
