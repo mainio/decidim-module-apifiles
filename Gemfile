@@ -19,7 +19,9 @@ gem "bootsnap", "~> 1.17"
 
 gem "puma", ">= 6.4.2"
 
-gem "faker", "~> 3.2"
+# Lock faker to older version to avoid seed errors from Decidim
+# (Faker::Twitter no longer exists in newer versions)
+gem "faker", "3.2"
 
 group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
