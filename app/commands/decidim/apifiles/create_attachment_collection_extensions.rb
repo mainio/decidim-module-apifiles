@@ -12,7 +12,7 @@ module Decidim
         def create_attachment_collection
           @attachment_collection = Decidim.traceability.create!(
             Decidim::AttachmentCollection,
-            @user,
+            current_user,
             attributes
           )
         end
