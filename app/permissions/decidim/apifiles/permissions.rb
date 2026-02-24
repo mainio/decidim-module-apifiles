@@ -20,7 +20,7 @@ module Decidim
       end
 
       def can_perform_actions_on?(subject, resource)
-        return unless permission_action.subject == subject
+        return false unless permission_action.subject == subject
 
         case permission_action.action
         when :create
