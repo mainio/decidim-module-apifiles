@@ -36,7 +36,7 @@ module Decidim
         )
 
         attachment_collection = nil
-        Decidim::Admin::CreateAttachmentCollection.call(form, object, current_user) do
+        Decidim::Admin::CreateAttachmentCollection.call(form, object) do
           on(:ok) do
             attachment_collection = @attachment_collection
           end
@@ -73,7 +73,7 @@ module Decidim
         )
 
         status = nil
-        Decidim::Admin::UpdateAttachmentCollection.call(attachment_collection, form, current_user) do
+        Decidim::Admin::UpdateAttachmentCollection.call(attachment_collection, form) do
           on(:ok) do
             status = :ok
           end

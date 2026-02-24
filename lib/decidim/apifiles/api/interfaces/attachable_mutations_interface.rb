@@ -40,7 +40,7 @@ module Decidim
         )
 
         attachment = nil
-        Decidim::Admin::CreateAttachment.call(form, object, current_user) do
+        Decidim::Admin::CreateAttachment.call(form, object) do
           on(:ok) do
             attachment = @attachment
           end
@@ -74,7 +74,7 @@ module Decidim
         )
 
         status = nil
-        Decidim::Admin::UpdateAttachment.call(attachment, form, current_user) do
+        Decidim::Admin::UpdateAttachment.call(attachment, form) do
           on(:ok) do
             status = :ok
           end
