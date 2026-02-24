@@ -10,7 +10,7 @@ module Decidim
         # it optional.
         _validators.reject! { |key, _| key == :description }
         _validate_callbacks.each do |callback|
-          callback.raw_filter.attributes.delete(:description)
+          callback.filter.attributes.delete(:description)
         end
 
         attribute :key, String
