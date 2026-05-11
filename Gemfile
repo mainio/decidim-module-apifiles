@@ -19,9 +19,7 @@ gem "bootsnap", "~> 1.17"
 
 gem "puma", ">= 6.4.2"
 
-# Lock faker to older version to avoid seed errors from Decidim
-# (Faker::Twitter no longer exists in newer versions)
-gem "faker", "3.2"
+gem "faker", "~> 3.2"
 
 group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
@@ -30,7 +28,7 @@ group :development, :test do
   gem "decidim-initiatives", DECIDIM_VERSION
 
   # Required for testing
-  gem "decidim-apiauth", github: "mainio/decidim-module-apiauth", branch: "release/0.29-stable"
+  gem "decidim-apiauth", github: "mainio/decidim-module-apiauth"
 
   gem "brakeman", "~> 5.2"
   gem "parallel_tests", "~> 4.2"
