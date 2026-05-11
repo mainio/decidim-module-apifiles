@@ -9,16 +9,16 @@ module Decidim
         super && context[:current_user]&.admin?
       end
 
-      field :id, GraphQL::Types::ID, "The id of this blob", null: false
-      field :key, GraphQL::Types::String, "The key of this blob", null: false
-      field :signed_id, GraphQL::Types::String, "The signed id of this blob", null: false
-      field :filename, GraphQL::Types::String, "The filename of this blob", null: false
-      field :content_type, GraphQL::Types::String, "The content type of this blob", null: false
-      field :metadata, GraphQL::Types::JSON, "The metadata type of this blob", null: false
       field :byte_size, GraphQL::Types::Int, "The byte size of this blob", null: false
       field :checksum, GraphQL::Types::String, "The checksum of this blob", null: false
+      field :content_type, GraphQL::Types::String, "The content type of this blob", null: false
       field :created_at, Decidim::Core::DateTimeType, "When this blob was created", null: true
+      field :filename, GraphQL::Types::String, "The filename of this blob", null: false
+      field :id, GraphQL::Types::ID, "The id of this blob", null: false
+      field :key, GraphQL::Types::String, "The key of this blob", null: false
+      field :metadata, GraphQL::Types::JSON, "The metadata type of this blob", null: false
       field :service_name, GraphQL::Types::String, "The service name of this blob (where the blob is stored at)", null: false
+      field :signed_id, GraphQL::Types::String, "The signed id of this blob", null: false
       field :src, GraphQL::Types::String, "The url of this blob", null: false
 
       def src
