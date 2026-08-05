@@ -39,6 +39,9 @@ module Decidim
 
       initializer "decidim_apifiles.query_extensions" do
         Decidim::Api::QueryType.include Decidim::Apifiles::QueryExtensions
+        Decidim::Core::AttachmentCollectionType.include(
+          Decidim::Apifiles::AttachmentCollectionTypeExtensions
+        )
       end
 
       initializer "decidim_apifiles.mutation_extensions", after: "decidim-api.graphiql" do

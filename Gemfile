@@ -27,9 +27,6 @@ group :development, :test do
   gem "decidim-dev", DECIDIM_VERSION
   gem "decidim-initiatives", DECIDIM_VERSION
 
-  # Required for testing
-  gem "decidim-apiauth", github: "mainio/decidim-module-apiauth"
-
   gem "brakeman", "~> 5.2"
   gem "parallel_tests", "~> 4.2"
 

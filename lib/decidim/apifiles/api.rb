@@ -3,7 +3,6 @@
 module Decidim
   module Apifiles
     autoload :AttachmentAttributes, "decidim/api/attachment_attributes"
-    autoload :AttachmentCollectionType, "decidim/api/attachment_collection_type"
     autoload :AttachmentCollectionAttributes, "decidim/api/attachment_collection_attributes"
     autoload :AttachmentCollectionInput, "decidim/api/attachment_collection_input"
     autoload :BlobType, "decidim/api/blob_type"

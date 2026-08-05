@@ -8,20 +8,20 @@ module Decidim
       include Decidim::Api::Types::BaseInterface
       description "An interface that can be used in objects with attachment collection mutations"
 
-      field :create_attachment_collection, Decidim::Apifiles::AttachmentCollectionType, null: false do
+      field :create_attachment_collection, Decidim::Core::AttachmentCollectionType, null: false do
         description "Creates an attachment collection."
 
         argument :attributes, Decidim::Apifiles::AttachmentCollectionAttributes, description: "Input attributes to create an attachment collection", required: true
       end
 
-      field :update_attachment_collection, Decidim::Apifiles::AttachmentCollectionType, null: false do
+      field :update_attachment_collection, Decidim::Core::AttachmentCollectionType, null: false do
         description "Updates an attachment collection."
 
         argument :id, GraphQL::Types::ID, required: true
         argument :attributes, Decidim::Apifiles::AttachmentCollectionAttributes, description: "Input attributes to update an attachment collection", required: true
       end
 
-      field :delete_attachment_collection, Decidim::Apifiles::AttachmentCollectionType, null: false do
+      field :delete_attachment_collection, Decidim::Core::AttachmentCollectionType, null: false do
         argument :id, GraphQL::Types::ID, required: true
       end
 

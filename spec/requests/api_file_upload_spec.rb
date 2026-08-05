@@ -3,6 +3,8 @@
 require "spec_helper"
 
 describe "APIFileUpload" do
+  include Devise::Test::IntegrationHelpers
+
   let!(:organization) { create(:organization) }
   let!(:user) { create(:user, :confirmed, :admin, organization:) }
 
@@ -15,7 +17,8 @@ describe "APIFileUpload" do
 
       it "does not allow uploading a file" do
         expect do
-          upload_file(authenticate)
+          sign_in user
+          upload_file
           expect(response).to have_http_status(:forbidden)
         end.not_to change(ActiveStorage::Blob, :count)
       end
@@ -24,7 +27,8 @@ describe "APIFileUpload" do
     context "and the user is an admin" do
       it "allows uploading files" do
         expect do
-          upload_file(authenticate)
+          sign_in user
+          upload_file
           expect(response).to have_http_status(:ok)
         end.to change(ActiveStorage::Blob, :count).by(1)
 
@@ -39,32 +43,22 @@ describe "APIFileUpload" do
         expect(response_json["signedId"]).to eq(blob.signed_id)
       end
     end
-
-    def authenticate
-      post(
-        "/api/sign_in",
-        params: { user: { email: user.email, password: "decidim123456789" } },
-        headers: { "HOST" => organization.host }
-      )
-      expect(response).to have_http_status(:ok)
-      response.headers["Authorization"]
-    end
   end
 
   context "when unauthenticated" do
     it "does not allow uploading a file" do
       expect do
-        upload_file("Bearer abcdef123456789")
+        upload_file
         expect(response).to have_http_status(:unauthorized)
       end.not_to change(ActiveStorage::Blob, :count)
     end
   end
 
-  def upload_file(authorization)
+  def upload_file
     post(
       "/api/blobs",
       params: { file: uploaded_file },
-      headers: { "HOST" => organization.host, "Authorization" => authorization }
+      headers: { "HOST" => organization.host }
     )
   end
 end

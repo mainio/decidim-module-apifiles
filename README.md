@@ -13,8 +13,7 @@ new file blobs to Decidim. These blobs can be then attached to different API
 objects through mutations.
 
 The blobs have to be uploaded as signed in. Sign in can be performed through the
-`/api/sign_in` endpoint provided by the
-[API Auth module](https://github.com/mainio/decidim-module-apiauth). The flow
+`/api/sign_in` endpoint. The flow
 should be as follows:
 
 1. Sign in through `POST /api/sign_in`
@@ -30,7 +29,6 @@ this whole flow. Examples are provided for Ruby and Node.js.
 Add the following lines to your application's Gemfile:
 
 ```ruby
-gem "decidim-apiauth", github: "mainio/decidim-module-apiauth", branch: "main"
 gem "decidim-apifiles", github: "mainio/decidim-module-apifiles", branch: "main"
 ```
 
@@ -39,9 +37,6 @@ And then execute:
 ```bash
 bundle
 ```
-
-And also follow the installation instructions of the
-[API Auth module](https://github.com/mainio/decidim-module-apiauth).
 
 ## Contributing
 
