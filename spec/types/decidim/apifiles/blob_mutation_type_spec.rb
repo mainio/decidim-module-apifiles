@@ -19,7 +19,7 @@ describe Decidim::Apifiles::BlobMutationType do
     let(:query) { "{ id }" }
 
     it "cannot access the blobs" do
-      expect(response).to be_nil
+      expect { response }.to raise_error(Decidim::Api::Errors::UnauthorizedObjectError, "You cannot view or edit this BlobMutation because you do not have permissions")
     end
   end
 
@@ -27,7 +27,7 @@ describe Decidim::Apifiles::BlobMutationType do
     let(:query) { "{ id }" }
 
     it "cannot access the blob mutations" do
-      expect(response).to be_nil
+      expect { response }.to raise_error(Decidim::Api::Errors::UnauthorizedObjectError, "You cannot view or edit this BlobMutation because you do not have permissions")
     end
   end
 

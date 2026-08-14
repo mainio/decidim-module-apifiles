@@ -6,6 +6,7 @@ module Decidim
     # an object that can receive updates to its attachment collections.
     module AttachableCollectionsMutationsInterface
       include Decidim::Api::Types::BaseInterface
+
       description "An interface that can be used in objects with attachment collection mutations"
 
       field :create_attachment_collection, Decidim::Core::AttachmentCollectionType, null: false do

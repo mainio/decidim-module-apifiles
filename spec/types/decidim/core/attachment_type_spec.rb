@@ -20,7 +20,7 @@ describe Decidim::Core::AttachmentType do
     let(:query) { "{ fileBlob { id } }" }
 
     it "does not return the blob for unauthorized users" do
-      expect(response["fileBlob"]).to be_nil
+      expect { response["fileBlob"] }.to raise_error(Decidim::Api::Errors::UnauthorizedObjectError, "You cannot view or edit this Blob because you do not have permissions")
     end
 
     context "when signed in as an admin" do

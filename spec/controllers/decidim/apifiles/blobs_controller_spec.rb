@@ -54,7 +54,7 @@ describe Decidim::Apifiles::BlobsController do
         let(:params) { { file: "foobar" } }
 
         it "responds with HTTP code 422" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(response.parsed_body).to eq({ "error" => "file_not_provided" })
         end
       end
@@ -68,7 +68,7 @@ describe Decidim::Apifiles::BlobsController do
         end
 
         it "does not allow uploading a file" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(response.parsed_body).to eq({ "error" => "unallowed_file_extension" })
         end
       end
@@ -82,7 +82,7 @@ describe Decidim::Apifiles::BlobsController do
         end
 
         it "does not allow uploading a file" do
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(response.parsed_body).to eq({ "error" => "unallowed_content_type" })
         end
       end
